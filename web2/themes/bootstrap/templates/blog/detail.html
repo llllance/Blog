@@ -1,0 +1,49 @@
+{% extends "./base.html" %}
+{% load comment_block %}
+{% block title %}{{ post.title }}{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="http://cdn.bootcss.com/highlight.js/8.0/styles/monokai_sublime.min.css">
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+{% endblock %}
+
+{% block main %}
+{% if post %}
+
+<div class="card post">
+    <div class="card-body">
+        <h1 class="card-title">{{ post.title }}</h1>
+        <span class="card-link">分类：<a href="{% url 'category-list' post.category.id %}">
+                {{ post.category.name }}</a></span>
+        <span class="card-link">作者：<a href="{% url 'author' post.owner.id %}">
+                {{ post.owner.username }}</a> </span>
+<hr/>
+<p class="card-text">
+        {% autoescape off %}
+        {{ post.content_html }}
+        {% endautoescape %}
+</p>
+    </div>
+    </div>
+    <div>
+         {% if previous_post %}
+            <b>上一篇：</b>
+            <a href="{% url 'post-detail' previous_post.id %}">{{ previous_post.title }}</a>
+        {% else %}
+            <b>没有了</b>
+        {% endif %}
+    </div>
+
+    <div>
+        {% if next_post %}
+            <b>下一篇：</b>
+            <a href="{%  url 'post-detail' next_post.id %}">{{ next_post.title }}</a>
+        {% else %}
+            <b>没有了</b>
+        {% endif %}
+    </div>
+
+{% endif %}
+    {% comment_block request.path %}
+{% endblock %}
